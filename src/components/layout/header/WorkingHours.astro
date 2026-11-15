@@ -1,0 +1,24 @@
+---
+/**
+ * WorkingHours.astro — график работы и динамический статус магазина.
+ *
+ * В статическом HTML выводится только график: статус («Сейчас работаем» /
+ * «Магазин закрыт») появляется после клиентского вычисления по московскому
+ * времени (src/scripts/modules/working-hours.ts), чтобы не показывать
+ * потенциально неверные данные.
+ *
+ * График общий для центров «Ясенево» и «Заокск».
+ */
+import { workingHours } from '../../../data/contacts';
+---
+
+<div class="working-hours" data-working-hours>
+  <p class="working-hours__schedule">
+    {workingHours.schedule}
+    <span class="working-hours__note">{workingHours.note}</span>
+  </p>
+  <p class="working-hours__status" data-working-hours-status hidden>
+    <span class="working-hours__dot" aria-hidden="true"></span>
+    <span data-working-hours-text></span>
+  </p>
+</div>

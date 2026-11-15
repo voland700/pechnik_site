@@ -1,0 +1,39 @@
+---
+/**
+ * HeroBanner.astro — статичный рекламный баннер главной страницы.
+ *
+ * Не зависит от JavaScript и Swiper, остаётся на месте при переключении
+ * слайдов. При наличии link весь баннер — семантическая ссылка <a>;
+ * без link выводится некликабельным <div> (пустые href не используются).
+ *
+ * Текст может содержать ограниченную HTML-разметку (<br> и т.п.);
+ * при передаче из CMS HTML должен очищаться на сервере.
+ */
+import type { HeroBannerData } from '../../../types/hero-slider';
+
+interface Props extends HeroBannerData {
+  class?: string;
+}
+
+const { name, text, img, link, class: className } = Astro.props;
+const src = img.startsWith('/') ? img : `/${img}`;
+const Tag = link ? 'a' : 'div';
+---
+
+<Tag
+  class:list={['hero-banner', className]}
+  href={link}
+>
+  <img
+    class="hero-banner__image"
+    src={src}
+    alt=""
+    loading="lazy"
+    decoding="async"
+  />
+  <span class="hero-banner__overlay" aria-hidden="true"></span>
+  <span class="hero-banner__content">
+    <span class="hero-banner__title">{name}</span>
+    {text && <span class="hero-banner__text" set:html={text} />}
+  </span>
+</Tag>

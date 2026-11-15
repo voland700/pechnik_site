@@ -1,0 +1,71 @@
+// -----------------------------------------------------------------------------
+// Контактный блок магазина (StoreContacts.astro)
+// Используется в контактной зоне Header и в мобильном меню.
+// -----------------------------------------------------------------------------
+@use '../abstracts/tokens' as t;
+@use '../abstracts/mixins' as m;
+
+.store-contacts {
+  font-size: t.$font-size-sm;
+  line-height: 1.5;
+
+  &__name {
+    margin: 0 0 t.$spacer * 0.25;
+    font-weight: t.$font-weight-bold;
+    color: t.$color-text;
+  }
+
+  &__note {
+    font-weight: t.$font-weight-regular;
+    color: t.$color-text-secondary;
+  }
+
+  &__address {
+    display: flex;
+    align-items: flex-start;
+    gap: t.$spacer * 0.5;
+    margin: 0 0 t.$spacer * 0.5;
+    font-style: normal;
+    color: t.$color-text-secondary;
+
+    .svg-icon {
+      flex: none;
+      margin-top: 0.2em;
+    }
+  }
+
+  &__phones {
+    @include m.list-reset;
+    display: grid;
+    gap: t.$spacer * 0.25;
+  }
+
+  &__phone {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 t.$spacer * 0.5;
+  }
+
+  &__label {
+    color: t.$color-text-secondary;
+  }
+
+  &__tel {
+    font-weight: t.$font-weight-semibold;
+    color: t.$color-text;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color t.$transition-fast;
+
+    @include m.hover {
+      color: t.$color-accent-hover;
+    }
+
+    @include m.focus-visible;
+  }
+
+  &__extra {
+    margin: t.$spacer * 0.5 0 0;
+    color: t.$color-text-secondary;
+  }
+}

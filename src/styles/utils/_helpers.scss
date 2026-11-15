@@ -1,0 +1,38 @@
+// -----------------------------------------------------------------------------
+// Вспомогательные классы проекта.
+// .visually-hidden уже предоставляет Bootstrap (vendors/_bootstrap.scss).
+// -----------------------------------------------------------------------------
+@use '../abstracts/tokens' as t;
+
+.text-secondary {
+  color: t.$color-text-secondary !important;
+}
+
+.text-accent {
+  color: t.$color-accent !important;
+}
+
+.text-success {
+  color: t.$color-success !important;
+}
+
+.text-error {
+  color: t.$color-error !important;
+}
+
+.font-light {
+  font-weight: t.$font-weight-light !important;
+}
+
+.font-semibold {
+  font-weight: t.$font-weight-semibold !important;
+}
+
+.font-bold {
+  font-weight: t.$font-weight-bold !important;
+}
+
+// Блокировка прокрутки страницы (например, при открытом меню)
+.no-scroll {
+  overflow: hidden;
+}

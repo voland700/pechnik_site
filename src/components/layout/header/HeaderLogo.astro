@@ -1,0 +1,25 @@
+---
+/**
+ * HeaderLogo.astro — оригинальный логотип + надпись «Печной центр»,
+ * единая ссылка на главную. Пропорции SVG не изменяются.
+ */
+import logo from '../../../../assets/logo.svg';
+
+interface Props {
+  href?: string;
+}
+
+const { href = '/' } = Astro.props;
+---
+
+<a class="header-logo" href={href} aria-label="Печной центр — на главную">
+  <img
+    class="header-logo__image"
+    src={logo.src}
+    width={logo.width}
+    height={logo.height}
+    alt=""
+    aria-hidden="true"
+  />
+  <span class="header-logo__text">Печной центр</span>
+</a>

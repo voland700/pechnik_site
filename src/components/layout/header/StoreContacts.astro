@@ -1,0 +1,39 @@
+---
+/**
+ * StoreContacts.astro — контактный блок одного магазина.
+ *
+ * Используется и в десктопной контактной зоне Header, и в мобильном
+ * выдвижном меню (один источник данных — src/data/contacts.ts).
+ * Все телефоны — кликабельные tel:-ссылки.
+ */
+import type { Store } from '../../../data/contacts';
+import Icon from '../../ui/Icon.astro';
+
+interface Props {
+  store: Store;
+}
+
+const { store } = Astro.props;
+---
+
+<div class="store-contacts">
+  <p class="store-contacts__name">
+    {store.name}
+    {store.note && <span class="store-contacts__note"> — {store.note}</span>}
+  </p>
+  <address class="store-contacts__address">
+    <Icon name="map-pin" size={16} />
+    {store.address}
+  </address>
+  <ul class="store-contacts__phones">
+    {
+      store.phones.map((phone) => (
+        <li class="store-contacts__phone">
+          {phone.label && <span class="store-contacts__label">{phone.label}:</span>}
+          <a class="store-contacts__tel" href={`tel:${phone.tel}`}>{phone.display}</a>
+        </li>
+      ))
+    }
+  </ul>
+  {store.extra && <p class="store-contacts__extra">{store.extra}</p>}
+</div>

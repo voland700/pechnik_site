@@ -1,0 +1,283 @@
+---
+/**
+ * index.astro — демонстрационная страница (технический UI Kit).
+ * НЕ является утверждённым дизайном главной страницы магазина.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/header/Header.astro';
+import SiteFooter from '../components/layout/SiteFooter.astro';
+import HeroShowcase from '../components/home/hero-slider/HeroShowcase.astro';
+import CategoryShowcase from '../components/home/category-showcase/CategoryShowcase.astro';
+import FeaturedProductsTabs, {
+  type FeaturedCategory,
+} from '../components/home/featured-products/FeaturedProductsTabs.astro';
+import { sliderData, bannerData } from '../data/hero-slider';
+import { showcaseData } from '../data/showcase';
+import tabsData from '../data/tabsData.json';
+import Icon from '../components/ui/Icon.astro';
+import site from '../data/site.json';
+import palette from '../data/palette.json';
+import logo from '../../assets/logo.svg';
+
+const fontIcons = ['flame', 'cart', 'phone', 'star', 'check', 'home', 'truck'];
+const slides = [1, 2, 3, 4];
+---
+
+<BaseLayout
+  title="Pechnik.su — технический UI Kit (Astro Starter)"
+  description="Демонстрационная страница инфраструктуры: шрифты, палитра, сетка, иконки, слайдер, галерея."
+>
+  <Header activeMenu="delivery" cartCount={7} isAuthenticated={false} />
+
+  <main>
+    <!-- Рекламный блок: Hero Slider + 4 баннера -->
+    <HeroShowcase slides={sliderData} banners={bannerData} />
+
+    <!-- Витрина категорий каталога -->
+    <CategoryShowcase items={showcaseData} />
+
+    <!-- Избранные товары -->
+    <FeaturedProductsTabs
+      title="Избранные товары"
+      categories={tabsData as unknown as FeaturedCategory[]}
+      maxProducts={10}
+    />
+
+    <!-- 1. Логотип -->
+    <section class="section">
+      <div class="container">
+        <h1 class="section__title">Технический UI Kit Pechnik.su</h1>
+        <p class="text-secondary">
+          Страница для проверки инфраструктуры: шрифты, токены, сетка, иконки, библиотеки.
+          Это не дизайн главной страницы.
+        </p>
+        <div class="demo-panel">
+          <h2 class="h4">Логотип</h2>
+          <p>
+            <img src={logo.src} width={logo.width} height={logo.height} alt={site.name} />
+          </p>
+          <p class="text-secondary">
+            <small>Оригинальный логотип Pechnik.su из assets/logo.svg.</small>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Шрифт + 3. Палитра -->
+    <section class="section section--alt">
+      <div class="container">
+        <h2 class="section__title">Шрифт Onest и палитра</h2>
+        <div class="row g-4">
+          <div class="col-lg-4">
+            <div class="demo-panel">
+              <h3 class="h5">Начертания Onest</h3>
+              <p class="font-light">Light 300 — Печной кирпич и дымоходы</p>
+              <p>Regular 400 — Печной кирпич и дымоходы</p>
+              <p class="font-semibold">SemiBold 600 — Печной кирпич и дымоходы</p>
+              <p class="font-bold">Bold 700 — Печной кирпич и дымоходы</p>
+            </div>
+          </div>
+          <div class="col-lg-8">
+            <ul class="palette">
+              {
+                palette.map((color) => (
+                  <li class="palette__item">
+                    <div class="palette__swatch" style={`background-color: ${color.hex}`} />
+                    <div class="palette__meta">
+                      <span class="palette__name">{color.name}</span>
+                      <span class="palette__hex">
+                        {color.hex} · {color.role}
+                      </span>
+                    </div>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Заголовки + 5. Текст и ссылки -->
+    <section class="section">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-lg-6">
+            <div class="demo-panel">
+              <h2 class="h4">Иерархия заголовков</h2>
+              <h1>Заголовок H1</h1>
+              <h2>Заголовок H2</h2>
+              <h3>Заголовок H3</h3>
+              <h4>Заголовок H4</h4>
+              <h5>Заголовок H5</h5>
+              <h6>Заголовок H6</h6>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="demo-panel">
+              <h2 class="h4">Текст и ссылки</h2>
+              <p>
+                Основной текст интернет-магазина: описания товаров, характеристики, условия
+                доставки. Печной кирпич выдерживает высокие температуры и подходит для
+                <a href="#catalog">кладки топок и каминов</a>.
+              </p>
+              <p class="text-secondary">
+                Вторичный текст — артикулы, подписи и вспомогательная информация.
+              </p>
+              <blockquote>Цитата: советы печника по выбору шамотного кирпича.</blockquote>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Кнопки -->
+    <section class="section section--alt">
+      <div class="container">
+        <h2 class="section__title">Кнопки</h2>
+        <div class="demo-panel d-flex flex-wrap gap-3 align-items-center">
+          <button type="button" class="btn btn--accent">В корзину</button>
+          <button type="button" class="btn btn--primary">Каталог</button>
+          <button type="button" class="btn btn--outline">Задать вопрос</button>
+          <button type="button" class="btn btn--accent btn--sm">Малая</button>
+          <button type="button" class="btn btn--primary btn--lg">Большая</button>
+          <button type="button" class="btn btn--accent" disabled>Недоступна</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Сетка Bootstrap -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section__title">Сетка Bootstrap 5.2</h2>
+        <div class="grid-demo">
+          <div class="row g-3">
+            <div class="col-12 col-md-6 col-lg-4"><div>.col-12 .col-md-6 .col-lg-4</div></div>
+            <div class="col-12 col-md-6 col-lg-4"><div>.col-12 .col-md-6 .col-lg-4</div></div>
+            <div class="col-12 col-md-12 col-lg-4"><div>.col-12 .col-md-12 .col-lg-4</div></div>
+          </div>
+          <div class="row g-3 mt-1">
+            <div class="col-6 col-md-3"><div>.col-6 .col-md-3</div></div>
+            <div class="col-6 col-md-3"><div>.col-6 .col-md-3</div></div>
+            <div class="col-6 col-md-3"><div>.col-6 .col-md-3</div></div>
+            <div class="col-6 col-md-3"><div>.col-6 .col-md-3</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="container-fluid mt-4">
+        <div class="grid-demo">
+          <div class="row g-3">
+            <div class="col"><div>.container-fluid → .col</div></div>
+            <div class="col"><div>.col</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8 + 9. Иконки -->
+    <section class="section section--alt">
+      <div class="container">
+        <h2 class="section__title">Иконки</h2>
+        <div class="row g-4">
+          <div class="col-lg-6">
+            <div class="demo-panel">
+              <h3 class="h5">Inline SVG (Icon.astro)</h3>
+              <div class="icons-demo">
+                <Icon name="search" size={28} />
+                <Icon name="cart" size={28} />
+                <Icon name="phone" size={28} />
+                <Icon name="user" size={28} />
+                <Icon name="heart" size={28} />
+                <Icon name="flame" size={28} class="text-accent" />
+                <Icon name="map-pin" size={28} />
+                <Icon name="mail" size={28} title="Электронная почта" />
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="demo-panel">
+              <h3 class="h5">Иконочный шрифт (vite-svg-2-webfont)</h3>
+              <div class="icons-demo">
+                {
+                  fontIcons.map((name) => (
+                    <i class={`icon icon-${name} icon--lg`} aria-hidden="true" />
+                  ))
+                }
+              </div>
+              <p class="text-secondary mt-3">
+                <small>Классы: <code>.icon .icon-{'{имя}'}</code>, размеры — <code>.icon--sm/md/lg</code>.</small>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. Swiper с Parallax -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section__title">Swiper 14 + Parallax</h2>
+        <div class="swiper demo-swiper" data-swiper>
+          <div class="swiper-wrapper">
+            {
+              slides.map((n) => (
+                <div class="swiper-slide">
+                  <img
+                    src={`/images/demo/slide-${n}.jpg`}
+                    alt={`Демонстрационный слайд ${n}`}
+                    data-swiper-parallax="-15%"
+                    loading={n === 1 ? 'eager' : 'lazy'}
+                  />
+                  <div class="demo-swiper__caption" data-swiper-parallax="-35%">
+                    <h3 class="demo-swiper__title h4">Слайд {n} из {slides.length}</h3>
+                    <p>Подпись движется с Parallax-эффектом относительно фона.</p>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+          <div class="swiper-pagination"></div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11. Fancybox + 12. SweetAlert2 -->
+    <section class="section section--alt">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-lg-6">
+            <div class="demo-panel demo-gallery">
+              <h2 class="h4">Fancybox 6</h2>
+              <p class="text-secondary">Нажмите на миниатюру — откроется полноразмерное изображение.</p>
+              <a
+                class="demo-gallery__thumb"
+                href="/images/demo/fancybox-full.jpg"
+                data-fancybox="demo"
+                data-caption="Демонстрационное изображение"
+              >
+                <img src="/images/demo/fancybox-thumb.jpg" width="480" height="300" alt="Демонстрационное изображение — открыть в полном размере" loading="lazy" />
+              </a>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="demo-panel">
+              <h2 class="h4">SweetAlert2</h2>
+              <p class="text-secondary">Демонстрационный вызов уведомления.</p>
+              <button
+                type="button"
+                class="btn btn--primary"
+                data-alert="Инфраструктура собрана и работает: шрифты, токены, сетка, иконки, слайдер и галерея."
+              >
+                Показать уведомление
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

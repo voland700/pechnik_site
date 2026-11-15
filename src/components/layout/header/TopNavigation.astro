@@ -1,0 +1,34 @@
+---
+/**
+ * TopNavigation.astro — верхнее информационное меню.
+ *
+ * Активный пункт определяется через props (id пункта), а не через
+ * window.location — на этапе CMS-интеграции активность будет задавать Битрикс.
+ */
+import { topNavigation } from '../../../data/navigation';
+
+interface Props {
+  /** id активного пункта из src/data/navigation.ts */
+  activeMenu?: string;
+}
+
+const { activeMenu } = Astro.props;
+---
+
+<nav class="top-nav" aria-label="Информационное меню">
+  <ul class="top-nav__list">
+    {
+      topNavigation.map((item) => (
+        <li class="top-nav__item">
+          <a
+            class:list={['top-nav__link', { active: item.id === activeMenu }]}
+            href={item.href}
+            aria-current={item.id === activeMenu ? 'page' : undefined}
+          >
+            {item.title}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>

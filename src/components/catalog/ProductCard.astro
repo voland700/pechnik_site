@@ -1,0 +1,170 @@
+---
+/**
+ * Переиспользуемая карточка товара. Сетку задаёт родительский контейнер.
+ * Все пользовательские строки выводятся как текст/атрибуты, не как HTML.
+ */
+import type { ProductFlag, ProductItem } from '../../types/product';
+import Icon from '../ui/Icon.astro';
+
+interface Props {
+  product: ProductItem;
+}
+
+const { product } = Astro.props;
+
+export function normalizeFlag(value: ProductFlag): boolean {
+  return value === true || value === 1 || value === '1';
+}
+
+function safeExternalOrRelativeUrl(value: string | undefined): string | null {
+  const url = value?.trim() ?? '';
+  if (!url || url === '#' || url.startsWith('//') || url.includes('\\')) {
+    return null;
+  }
+  if (/^https?:\/\//i.test(url) || url.startsWith('/') || url.startsWith('#')) {
+    return url;
+  }
+  // Относительные пути допустимы, URI-схемы javascript:, data: и др. — нет.
+  return /^[a-z][a-z\d+.-]*:/i.test(url) ? null : url;
+}
+
+const cardId = `product-${String(product.id).replace(/[^a-zA-Z0-9_-]/g, '-')}`;
+const productHref = safeExternalOrRelativeUrl(product.url) ?? `#${cardId}`;
+const rawImageSrc = product.img.trim().startsWith('#')
+  ? null
+  : safeExternalOrRelativeUrl(product.img);
+const imageSrc = rawImageSrc
+  ? /^(?:https?:\/\/|\/)/i.test(rawImageSrc)
+    ? rawImageSrc
+    : `/${rawImageSrc.replace(/^\.\//, '')}`
+  : null;
+
+const name = product.name.trim();
+const price = product.price?.trim() ?? '';
+const oldPrice = product.old_price.trim();
+const discount = product.discount.trim().replace(/^-/, '−');
+const hasPrice = price.length > 0;
+const purchaseEnabled = normalizeFlag(product.canBuy) && hasPrice;
+const badges = [
+  { active: normalizeFlag(product.new), modifier: 'new', label: 'Новинка' },
+  { active: normalizeFlag(product.hit), modifier: 'hit', label: 'Хит' },
+  { active: normalizeFlag(product.sale), modifier: 'sale', label: 'Акция' },
+].filter((badge) => badge.active);
+---
+
+<article
+  class:list={[
+    'product-card',
+    !purchaseEnabled && 'product-card--unavailable',
+    !hasPrice && 'product-card--price-request',
+  ]}
+  id={cardId}
+  data-product-card
+  data-product-card-initialized="false"
+>
+  <div class="product-card__media">
+    <a
+      class="product-card__media-link"
+      href={productHref}
+      aria-label={`Перейти к товару: ${name}`}
+    >
+      {imageSrc ? (
+        <img
+          class="product-card__image"
+          src={imageSrc}
+          alt={name}
+          width="480"
+          height="360"
+          loading="lazy"
+          decoding="async"
+        />
+      ) : (
+        <span class="product-card__image-empty">Изображение недоступно</span>
+      )}
+    </a>
+
+    {badges.length > 0 && (
+      <div class="product-card__badges" aria-label="Метки товара">
+        {badges.map((badge) => (
+          <span class={`product-card__badge product-card__badge--${badge.modifier}`}>
+            {badge.label}
+          </span>
+        ))}
+      </div>
+    )}
+
+    {normalizeFlag(product.inStock) && (
+      <span class="product-card__availability">
+        <span class="product-card__availability-dot" aria-hidden="true"></span>
+        В наличии
+      </span>
+    )}
+
+    {discount && <span class="product-card__discount" aria-label={`Скидка ${discount}`}>{discount}</span>}
+  </div>
+
+  <div class="product-card__body">
+    <h3 class="product-card__title">
+      <a class="product-card__title-link" href={productHref}>{name}</a>
+    </h3>
+
+    <div class="product-card__price">
+      {hasPrice ? (
+        <>
+          <span class="product-card__current-price">{price} <span class="product-card__currency">руб.</span></span>
+          {oldPrice && <del class="product-card__old-price">{oldPrice} руб.</del>}
+        </>
+      ) : (
+        <span class="product-card__price-request">Цена по запросу</span>
+      )}
+    </div>
+
+    <form class="product-card__form" data-product-card-form novalidate>
+      <input type="hidden" name="productId" value={String(product.id)} />
+      <div class="product-card__actions">
+        <div class="product-card__quantity" data-product-card-quantity>
+          <button
+            class="product-card__quantity-button"
+            type="button"
+            data-quantity-action="decrease"
+            aria-label={`Уменьшить количество товара «${name}»`}
+            disabled={!purchaseEnabled}
+          >
+            <span aria-hidden="true">−</span>
+          </button>
+          <input
+            class="product-card__quantity-input"
+            type="number"
+            name="quantity"
+            value="1"
+            min="1"
+            max="999"
+            step="1"
+            inputmode="numeric"
+            aria-label={`Количество товара «${name}»`}
+            data-quantity-input
+            disabled={!purchaseEnabled}
+          />
+          <button
+            class="product-card__quantity-button"
+            type="button"
+            data-quantity-action="increase"
+            aria-label={`Увеличить количество товара «${name}»`}
+            disabled={!purchaseEnabled}
+          >
+            <span aria-hidden="true">+</span>
+          </button>
+        </div>
+        <button
+          class="product-card__add-button"
+          type="submit"
+          disabled={!purchaseEnabled}
+        >
+          <Icon name="cart" size={19} />
+          <span>В корзину</span>
+        </button>
+      </div>
+      <output class="product-card__demo-output" data-product-card-output aria-live="polite" hidden></output>
+    </form>
+  </div>
+</article>

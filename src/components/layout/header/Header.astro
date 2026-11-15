@@ -1,0 +1,136 @@
+---
+/**
+ * Header.astro — шапка сайта Pechnik.su (три уровня + мобильное меню).
+ *
+ * Уровень 1 (topbar): информационное меню, вход/ЛК, обратный звонок.
+ * Уровень 2 (sticky): бургер (mobile), логотип, каталог, поиск, режим работы,
+ *                     корзина; на mobile — отдельная постоянно видимая
+ *                     строка поиска. Закрепляется при прокрутке.
+ * Уровень 3: контакты центров «Ясенево» и «Заокск» (постоянно видны
+ *            на desktop; на mobile — в выдвижном меню).
+ *
+ * Блоки возвращаются соседними элементами (fragment), чтобы sticky-строка
+ * была прямым потомком <body> — тогда position: sticky работает на всю
+ * высоту страницы без JavaScript и без layout shift.
+ *
+ * Пример: <Header activeMenu="delivery" cartCount={7} isAuthenticated={false} />
+ */
+import TopNavigation from './TopNavigation.astro';
+import HeaderLogo from './HeaderLogo.astro';
+import CatalogLink from './CatalogLink.astro';
+import SearchForm from './SearchForm.astro';
+import WorkingHours from './WorkingHours.astro';
+import CartLink from './CartLink.astro';
+import AccountLink from './AccountLink.astro';
+import StoreContacts from './StoreContacts.astro';
+import MobileMenu from './MobileMenu.astro';
+import Icon from '../../ui/Icon.astro';
+import { stores } from '../../../data/contacts';
+
+interface Props {
+  /** id активного пункта информационного меню (src/data/navigation.ts) */
+  activeMenu?: string;
+  /** Состояние авторизации (на этапе CMS — с сервера) */
+  isAuthenticated?: boolean;
+  /** Количество товаров в корзине */
+  cartCount?: number;
+  /** URL каталога (предварительный) */
+  catalogUrl?: string;
+  /** URL корзины (предварительный) */
+  cartUrl?: string;
+  /** URL личного кабинета (предварительный) */
+  accountUrl?: string;
+  /** URL страницы входа (предварительный) */
+  loginUrl?: string;
+  /** URL главной страницы */
+  homeUrl?: string;
+  /** URL поисковой выдачи (предварительный) */
+  searchAction?: string;
+  /** Имя GET-параметра поиска */
+  searchParam?: string;
+}
+
+const {
+  activeMenu,
+  isAuthenticated = false,
+  cartCount = 0,
+  catalogUrl = '/catalog/',
+  cartUrl = '/cart/',
+  accountUrl = '/account/',
+  loginUrl = '/login/',
+  homeUrl = '/',
+  searchAction = '/search/',
+  searchParam = 'q',
+} = Astro.props;
+---
+
+{/* Уровень 1: верхняя информационная панель (desktop) */}
+<div class="topbar">
+  <div class="container topbar__inner">
+    <TopNavigation activeMenu={activeMenu} />
+    <div class="topbar__aside">
+      <button class="topbar__callback" type="button" data-action="callback">
+        Обратный звонок
+      </button>
+      <AccountLink
+        isAuthenticated={isAuthenticated}
+        accountUrl={accountUrl}
+        loginUrl={loginUrl}
+      />
+    </div>
+  </div>
+</div>
+
+{/* Маркер для определения sticky-состояния (тень) — src/scripts/modules/header.ts */}
+<div class="header-sentinel" data-header-sentinel aria-hidden="true"></div>
+
+{/* Уровень 2: основная строка — закрепляется при прокрутке */}
+<header class="header" data-header>
+  <div class="container header__row">
+    <button
+      class="header__burger"
+      type="button"
+      data-menu-open
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      aria-label="Открыть меню"
+    >
+      <Icon name="menu" size={26} />
+    </button>
+
+    <HeaderLogo href={homeUrl} />
+    <CatalogLink href={catalogUrl} />
+    <SearchForm
+      id="search-desktop"
+      class="header__search"
+      action={searchAction}
+      param={searchParam}
+    />
+    <div class="header__hours">
+      <WorkingHours />
+    </div>
+    <CartLink count={cartCount} href={cartUrl} />
+  </div>
+
+  {/* Мобильный поиск: постоянно виден отдельной строкой и не исчезает при прокрутке */}
+  <div class="header__search-row">
+    <div class="container">
+      <SearchForm id="search-mobile" action={searchAction} param={searchParam} />
+    </div>
+  </div>
+</header>
+
+{/* Уровень 3: контакты магазинов (desktop, постоянно видны) */}
+<div class="stores">
+  <div class="container stores__row">
+    {stores.map((store) => <StoreContacts store={store} />)}
+  </div>
+</div>
+
+{/* Мобильное выдвижное меню */}
+<MobileMenu
+  activeMenu={activeMenu}
+  isAuthenticated={isAuthenticated}
+  accountUrl={accountUrl}
+  loginUrl={loginUrl}
+/>

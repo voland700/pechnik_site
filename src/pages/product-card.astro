@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductCard from '../components/catalog/ProductCard.astro';
+import { productCardDemoItems } from '../data/products-demo';
+
+const stateLabels = [
+  'Обычный товар',
+  'Скидка и старая цена',
+  'Новинка',
+  'Хит',
+  'Акция',
+  'Несколько лейблов',
+  'Нет в наличии, покупка разрешена',
+  'В наличии, покупка запрещена',
+  'Цена по запросу',
+  'Длинное название',
+];
+const narrowProduct = { ...productCardDemoItems[1], id: 1102 };
+---
+
+<BaseLayout
+  title="ProductCard — демонстрация состояний | Pechnik.su"
+  description="Тестовая страница переиспользуемой карточки товара: лейблы, цены, наличие, покупка и адаптивность."
+>
+  <main class="product-card-demo">
+    <header class="product-card-demo__header">
+      <div class="container">
+        <a class="product-card-demo__back" href="/">← Технический UI Kit</a>
+        <h1>Карточка товара</h1>
+        <p>
+          Демонстрационные данные для проверки компонента. Отправка формы не меняет корзину
+          и показывает только технические значения productId и quantity.
+        </p>
+      </div>
+    </header>
+
+    <section class="product-card-demo__section" aria-labelledby="product-card-states">
+      <div class="container">
+        <h2 id="product-card-states">Состояния компонента</h2>
+        <ul class="product-card-demo__grid">
+          {productCardDemoItems.map((product, index) => (
+            <li class="product-card-demo__item" data-demo-state={index + 1}>
+              <p class="product-card-demo__state">{stateLabels[index]}</p>
+              <ProductCard product={product} />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section class="product-card-demo__section product-card-demo__section--alt" aria-labelledby="product-card-container">
+      <div class="container">
+        <h2 id="product-card-container">Узкий родительский контейнер</h2>
+        <p class="product-card-demo__description">
+          Когда доступной ширины не хватает, кнопка переносится под выбор количества —
+          независимо от ширины окна браузера.
+        </p>
+        <div class="product-card-demo__narrow">
+          <ProductCard product={narrowProduct} />
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

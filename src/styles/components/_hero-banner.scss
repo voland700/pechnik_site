@@ -1,0 +1,105 @@
+// -----------------------------------------------------------------------------
+// Рекламный баннер главной страницы (HeroBanner.astro)
+// Статичен: не зависит от Swiper и JavaScript.
+// -----------------------------------------------------------------------------
+@use '../abstracts/tokens' as t;
+@use '../abstracts/mixins' as m;
+
+.hero-banner {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  text-decoration: none;
+  border-radius: t.$radius-md;
+  background-color: t.$color-primary-dark; // фон на время загрузки изображения
+
+  // Пропорции по референсам: mobile ~16:9, tablet ~3:2,
+  // desktop — высота от grid-строк (см. _hero-showcase.scss)
+  aspect-ratio: 16 / 9;
+
+  @include m.media-up(md) {
+    aspect-ratio: 3 / 2;
+  }
+
+  @include m.media-up(xl) {
+    aspect-ratio: auto;
+    min-height: 0;
+  }
+
+  &__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform t.$transition-base;
+  }
+
+  // Градиент: верх почти прозрачный, низ затемнён для читаемости текста
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgb(0 0 0 / 65%) 0%,
+      rgb(0 0 0 / 30%) 45%,
+      rgb(0 0 0 / 0%) 75%
+    );
+    pointer-events: none;
+  }
+
+  &__content {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: t.$spacer * 0.5;
+    padding: t.$spacer * 0.75;
+  }
+
+  // Компактная плашка в фирменном сланцевом цвете
+  &__title {
+    padding: 2px t.$spacer * 0.625;
+    font-size: 0.8rem;
+    font-weight: t.$font-weight-semibold;
+    line-height: 1.35;
+    color: #fff;
+    text-transform: uppercase;
+    background-color: t.$color-primary;
+    border-radius: t.$radius-sm;
+  }
+
+  &__text {
+    font-size: t.$font-size-sm;
+    line-height: 1.35;
+    color: #fff;
+    text-shadow: 0 1px 2px rgb(0 0 0 / 50%);
+  }
+
+  // Лёгкий hover только на устройствах с реальным hover
+  @include m.hover {
+    .hero-banner__image {
+      transform: scale(1.05);
+    }
+  }
+
+  // Контур внутри баннера (overflow: hidden обрезал бы внешний)
+  &:focus-visible {
+    outline: 2px solid t.$color-accent;
+    outline-offset: -2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__image {
+      transition: none;
+    }
+
+    @include m.hover {
+      .hero-banner__image {
+        transform: none;
+      }
+    }
+  }
+}

@@ -1,0 +1,68 @@
+// -----------------------------------------------------------------------------
+// SCSS-миксины проекта
+// -----------------------------------------------------------------------------
+@use 'sass:map';
+
+// Breakpoints зеркалят $grid-breakpoints Bootstrap (vendors/_bootstrap.scss).
+// Значения должны совпадать — менять только синхронно.
+$breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+);
+
+/// Минимальная ширина: @include media-up(md) { ... }
+@mixin media-up($name) {
+  $min: map.get($breakpoints, $name);
+
+  @if $min == 0 {
+    @content;
+  } @else {
+    @media (min-width: $min) {
+      @content;
+    }
+  }
+}
+
+/// Максимальная ширина: @include media-down(lg) { ... }
+@mixin media-down($name) {
+  $max: map.get($breakpoints, $name);
+
+  @media (max-width: ($max - 0.02px)) {
+    @content;
+  }
+}
+
+/// Hover только на устройствах с реальным hover
+@mixin hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @content;
+    }
+  }
+}
+
+/// Единый фокусный контур для доступности
+@mixin focus-visible {
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
+
+/// Обрезка текста с многоточием
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/// Сброс стилей списка
+@mixin list-reset {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

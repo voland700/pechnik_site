@@ -1,0 +1,381 @@
+// -----------------------------------------------------------------------------
+// Шапка сайта: верхняя панель, основная (sticky) строка, контактная зона.
+// Мобильное меню — components/_mobile-menu.scss,
+// контакты магазинов — components/_store-contacts.scss,
+// форма поиска — components/_search-form.scss.
+// -----------------------------------------------------------------------------
+@use '../abstracts/tokens' as t;
+@use '../abstracts/mixins' as m;
+
+// Корректировка позиции при переходе по якорным ссылкам (sticky-строка сверху)
+html {
+  scroll-padding-top: calc(#{t.$header-height} + t.$spacer);
+}
+
+// --- Уровень 1: верхняя информационная панель --------------------------------
+.topbar {
+  display: none;
+  font-size: t.$font-size-sm;
+  background-color: t.$color-surface-alt;
+  border-bottom: 1px solid t.$color-border;
+
+  @include m.media-up(lg) {
+    display: block;
+  }
+}
+
+.topbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: t.$spacer * 1.5;
+  min-height: 42px;
+}
+
+.topbar__aside {
+  display: flex;
+  align-items: center;
+  gap: t.$spacer * 1.5;
+  flex: none;
+}
+
+// Информационное меню
+.top-nav__list {
+  @include m.list-reset;
+  display: flex;
+  flex-wrap: wrap;
+  gap: t.$spacer * 0.25 t.$spacer * 1.5;
+}
+
+.top-nav__link {
+  display: inline-block;
+  padding-block: t.$spacer * 0.5;
+  font-weight: t.$font-weight-semibold;
+  color: t.$color-primary;
+  text-decoration: none;
+  transition: color t.$transition-fast;
+
+  @include m.hover {
+    color: t.$color-accent-hover;
+  }
+
+  @include m.focus-visible;
+
+  &:active {
+    color: t.$color-primary-dark;
+  }
+
+  &.active {
+    color: t.$color-accent-hover;
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+}
+
+// Обратный звонок — кнопка в виде ссылки (desktop)
+.topbar__callback {
+  padding: 0;
+  padding-block: t.$spacer * 0.5;
+  font: inherit;
+  font-weight: t.$font-weight-semibold;
+  color: t.$color-primary;
+  text-decoration: none;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: color t.$transition-fast;
+
+  @include m.hover {
+    color: t.$color-accent-hover;
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+    background-color: transparent;
+  }
+
+  @include m.focus-visible;
+}
+
+// Вход / Личный кабинет
+.account-link {
+  display: inline-flex;
+  align-items: center;
+  gap: t.$spacer * 0.5;
+  font-weight: t.$font-weight-semibold;
+  color: t.$color-primary;
+  text-decoration: none;
+  transition: color t.$transition-fast;
+
+  @include m.hover {
+    color: t.$color-accent-hover;
+  }
+
+  @include m.focus-visible;
+}
+
+// --- Уровень 2: основная строка (sticky) --------------------------------------
+// Маркер для IntersectionObserver (определение прилипшего состояния)
+.header-sentinel {
+  display: block;
+  height: 1px;
+  margin-bottom: -1px;
+  pointer-events: none;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: t.$z-header;
+  background-color: t.$color-surface;
+  border-bottom: 1px solid t.$color-border;
+  transition: box-shadow t.$transition-base;
+
+  &--stuck {
+    border-bottom-color: transparent;
+    box-shadow: t.$shadow-md;
+  }
+}
+
+.header__row {
+  display: flex;
+  align-items: center;
+  gap: t.$spacer;
+  min-height: t.$header-height;
+
+  @include m.media-up(lg) {
+    gap: t.$spacer * 1.5;
+  }
+}
+
+// Бургер (только мобильная/планшетная компоновка)
+.header__burger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  color: t.$color-primary;
+  background: none;
+  border: 0;
+  border-radius: t.$radius-md;
+  cursor: pointer;
+  transition: color t.$transition-fast;
+
+  @include m.hover {
+    color: t.$color-accent-hover;
+  }
+
+  @include m.focus-visible;
+
+  @include m.media-up(lg) {
+    display: none;
+  }
+}
+
+// Логотип + «Печной центр»
+.header-logo {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  gap: t.$spacer * 0.75;
+  margin-right: auto;
+  text-decoration: none;
+
+  @include m.media-up(lg) {
+    margin-right: 0;
+  }
+}
+
+.header-logo__image {
+  display: block;
+  width: 36px;
+  height: auto;
+
+  @include m.media-up(lg) {
+    width: 48px;
+  }
+}
+
+.header-logo__text {
+  font-size: t.$font-size-h5;
+  font-weight: t.$font-weight-bold;
+  color: t.$color-text;
+  transition: color 0.3s ease-out;
+
+  .header-logo:hover & {
+    color: t.$color-accent;
+  }
+}
+
+// Кнопка «Каталог» (desktop)
+.catalog-link {
+  display: none;
+  align-items: center;
+  gap: t.$spacer * 0.5;
+  flex: none;
+  padding: (t.$spacer * 0.75) (t.$spacer * 1.5);
+  font-weight: t.$font-weight-semibold;
+  line-height: 1.3;
+  color: #fff;
+  text-decoration: none;
+  background-color: t.$color-primary;
+  border-radius: t.$radius-md;
+  transition: background-color t.$transition-fast;
+
+  @include m.media-up(lg) {
+    display: inline-flex;
+  }
+
+  @include m.hover {
+    color: #fff;
+    background-color: t.$color-primary-dark;
+  }
+
+  @include m.focus-visible;
+}
+
+// Поиск в основной строке (desktop).
+// Специфичность двух классов нужна, чтобы перекрыть .search-form { display: flex }.
+.header__search.search-form {
+  display: none;
+
+  @include m.media-up(lg) {
+    display: flex;
+    flex: 1 1 220px;
+    max-width: 520px;
+  }
+}
+
+// Мобильная строка поиска: постоянно видна, входит в sticky-зону
+.header__search-row {
+  padding-bottom: t.$spacer * 0.75;
+
+  @include m.media-up(lg) {
+    display: none;
+  }
+}
+
+// Режим работы в основной строке
+.header__hours {
+  display: none;
+  flex: none;
+
+  @include m.media-up(lg) {
+    display: block;
+  }
+}
+
+// Режим работы: график + статус с индикатором
+.working-hours {
+  font-size: t.$font-size-xs;
+  line-height: 1.4;
+
+  &__schedule {
+    margin: 0;
+    font-weight: t.$font-weight-semibold;
+    color: t.$color-text;
+  }
+
+  &__note {
+    display: block;
+    font-weight: t.$font-weight-regular;
+    color: t.$color-text-secondary;
+  }
+
+  &__status {
+    display: flex;
+    align-items: center;
+    gap: t.$spacer * 0.5;
+    margin: 0;
+    font-weight: t.$font-weight-semibold;
+  }
+
+  &__dot {
+    flex: none;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: t.$color-text-secondary;
+  }
+
+  &__status--open {
+    color: t.$color-success;
+
+    .working-hours__dot {
+      background-color: t.$color-success;
+    }
+  }
+
+  &__status--closed {
+    color: t.$color-status-closed;
+
+    .working-hours__dot {
+      background-color: t.$color-status-closed;
+    }
+  }
+}
+
+// Корзина со счётчиком
+.cart-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  min-width: 44px;
+  min-height: 44px;
+  color: t.$color-primary;
+  text-decoration: none;
+  transition: color t.$transition-fast;
+
+  @include m.hover {
+    color: t.$color-accent-hover;
+  }
+
+  @include m.focus-visible;
+}
+
+// Badge: при 0 — нейтральный тёмный, при >0 — акцентный (.cart-link--filled)
+.cart-link__badge {
+  position: absolute;
+  top: 2px;
+  right: 0;
+  min-width: 18px;
+  height: 18px;
+  padding-inline: 5px;
+  font-size: 11px;
+  font-weight: t.$font-weight-bold;
+  line-height: 18px;
+  text-align: center;
+  color: #fff;
+  background-color: t.$color-primary;
+  border-radius: t.$radius-pill;
+
+  .cart-link--filled & {
+    color: t.$color-text;
+    background-color: t.$color-accent;
+  }
+}
+
+// --- Уровень 3: контактная зона (desktop, постоянно видна) --------------------
+.stores {
+  display: none;
+  background-color: t.$color-surface-alt;
+  border-bottom: 1px solid t.$color-border;
+
+  @include m.media-up(lg) {
+    display: block;
+  }
+}
+
+.stores__row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: t.$spacer * 1.5;
+  padding-block: t.$spacer * 1.25;
+
+  @include m.media-up(xl) {
+    grid-template-columns: 1fr 1fr;
+  }
+}

@@ -1,0 +1,100 @@
+---
+/**
+ * HeroSlide.astro — отдельный слайд Hero Slider.
+ *
+ * Слои: фон → overlay → текстовый контент → товарное изображение.
+ * Parallax-параметры разметки (data-swiper-parallax-*) обрабатывает
+ * модуль src/scripts/modules/hero-slider.ts; без JS все слои статичны.
+ */
+import type { HeroSlideData } from '../../../types/hero-slider';
+
+interface Props {
+  slide: HeroSlideData;
+  /** Первый слайд: фон и товарное изображение грузятся с высоким приоритетом */
+  isFirst?: boolean;
+}
+
+const { slide, isFirst = false } = Astro.props;
+const loading = isFirst ? 'eager' : 'lazy';
+---
+
+<div class="hero-slider__slide swiper-slide">
+  <div
+    class="hero-slider__background"
+    data-swiper-parallax="-1%"
+    data-swiper-parallax-duration="1200"
+  >
+    <img
+      class="hero-slider__bg-img"
+      src={slide.backgraund}
+      alt=""
+      loading={loading}
+      decoding="async"
+      fetchpriority={isFirst ? 'high' : 'auto'}
+    />
+  </div>
+  <div
+    class="hero-slider__overlay"
+    style={slide.overlay ? `background: ${slide.overlay}` : undefined}
+    aria-hidden="true"
+  ></div>
+
+  <div class="hero-slider__content">
+    {
+      slide.link ? (
+        <a
+          href={slide.link}
+          class="hero-slider__title"
+          data-swiper-parallax-x="-20"
+          data-swiper-parallax-opacity="0"
+          data-swiper-parallax-duration="900"
+        >
+          {slide.name}
+        </a>
+      ) : (
+        <p
+          class="hero-slider__title"
+          data-swiper-parallax-x="-20"
+          data-swiper-parallax-opacity="0"
+          data-swiper-parallax-duration="900"
+        >
+          {slide.name}
+        </p>
+      )
+    }
+    <div
+      class="hero-slider__description"
+      data-swiper-parallax-x="-30"
+      data-swiper-parallax-opacity="0"
+      data-swiper-parallax-duration="1000"
+      set:html={slide.text}
+    />
+    {
+      slide.link && (
+        <a
+          href={slide.link}
+          class="hero-slider__button"
+          data-swiper-parallax-y="15"
+          data-swiper-parallax-opacity="0"
+          data-swiper-parallax-duration="1100"
+        >
+          Подробнее
+        </a>
+      )
+    }
+  </div>
+
+  {
+    slide.img && (
+      <div
+        class="hero-slider__image"
+        data-swiper-parallax-x="35"
+        data-swiper-parallax-opacity="0"
+        data-swiper-parallax-scale="0.95"
+        data-swiper-parallax-duration="1100"
+      >
+        <img src={slide.img} alt="" loading={loading} decoding="async" />
+      </div>
+    )
+  }
+</div>

@@ -1,0 +1,43 @@
+// -----------------------------------------------------------------------------
+// Подвал сайта
+// -----------------------------------------------------------------------------
+@use '../abstracts/tokens' as t;
+@use '../abstracts/mixins' as m;
+
+.site-footer {
+  padding-block: t.$spacer * 3 t.$spacer * 2;
+  color: rgb(255 255 255 / 85%);
+  background-color: t.$color-primary;
+
+  a {
+    color: rgb(255 255 255 / 85%);
+    text-decoration: none;
+    transition: color t.$transition-fast;
+
+    @include m.hover {
+      color: t.$color-warm;
+    }
+  }
+}
+
+.site-footer__title {
+  font-size: t.$font-size-sm;
+  font-weight: t.$font-weight-semibold;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.site-footer__nav {
+  @include m.list-reset;
+  display: grid;
+  gap: t.$spacer * 0.5;
+}
+
+.site-footer__bottom {
+  margin-top: t.$spacer * 2;
+  padding-top: t.$spacer * 1.5;
+  border-top: 1px solid rgb(255 255 255 / 15%);
+  font-size: t.$font-size-sm;
+  color: rgb(255 255 255 / 60%);
+}

@@ -1,0 +1,260 @@
+// -----------------------------------------------------------------------------
+// Основной Hero Slider главной страницы (HeroSlider.astro / HeroSlide.astro)
+// Эффект Fade + Parallax настраивается в scripts/modules/hero-slider.ts.
+// Все стили scoped под .hero-slider — другие карусели не затрагиваются.
+// -----------------------------------------------------------------------------
+@use '../abstracts/tokens' as t;
+@use '../abstracts/mixins' as m;
+
+.hero-slider {
+  overflow: hidden;
+  // min-width: 0 — обязательно для grid-элемента со Swiper: иначе
+  // min-content обёртки слайдов раскручивает ширину контейнера
+  width: 100%;
+  min-width: 0;
+  border-radius: t.$radius-md;
+  background-color: t.$color-primary-dark; // фон на время загрузки
+
+  // Адаптивная высота по референсам
+  height: clamp(210px, 55vw, 340px); // mobile
+
+  @include m.media-up(md) {
+    height: clamp(240px, 32vw, 380px); // tablet
+  }
+
+  @include m.media-up(xl) {
+    height: clamp(380px, 33vw, 450px); // desktop: 380–450px
+  }
+
+  // --- Слайд -------------------------------------------------------------------
+  &__slide {
+    position: relative;
+    overflow: hidden;
+  }
+
+  // Фоновое изображение (parallax-слой)
+  &__background {
+    position: absolute;
+    inset: 0;
+  }
+
+  &__bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  // Overlay: на mobile/tablet равномерный (текст по центру),
+  // на desktop градиент слева (текст слева)
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgb(0 0 0 / 45%);
+    pointer-events: none;
+
+    @include m.media-up(xl) {
+      background: linear-gradient(
+        90deg,
+        rgb(0 0 0 / 55%) 0%,
+        rgb(0 0 0 / 30%) 45%,
+        rgb(0 0 0 / 5%) 75%
+      );
+    }
+  }
+
+  // --- Текстовый контент ---------------------------------------------------------
+  &__content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: t.$spacer * 1.25;
+    text-align: center;
+    color: #fff;
+
+    @include m.media-up(xl) {
+      align-items: flex-start;
+      max-width: 55%;
+      padding: t.$spacer * 2.5;
+      text-align: left;
+    }
+  }
+
+  &__title {
+    margin: 0 0 t.$spacer * 0.75;
+    font-size: clamp(1.2rem, 4vw, 1.75rem);
+    font-weight: t.$font-weight-bold;
+    line-height: t.$line-height-heading;
+    color: #fff;
+    text-decoration: none;
+    text-wrap: balance;
+  }
+
+  a#{&}__title {
+    transition: color t.$transition-fast;
+
+    @include m.hover {
+      color: t.$color-warm;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
+  }
+
+  &__description {
+    font-size: clamp(0.875rem, 2.2vw, 1.05rem);
+    line-height: 1.5;
+
+    p {
+      margin: 0 0 t.$spacer * 0.25;
+    }
+
+    ul {
+      @include m.list-reset;
+    }
+
+    strong {
+      font-weight: t.$font-weight-semibold;
+      color: t.$color-accent;
+    }
+  }
+
+  // Кнопка «Подробнее» — контурная, при наведении заливается акцентом
+  &__button {
+    display: inline-block;
+    margin-top: t.$spacer * 1.25;
+    padding: t.$spacer * 0.625 t.$spacer * 1.5;
+    font-size: t.$font-size-sm;
+    font-weight: t.$font-weight-semibold;
+    line-height: 1.3;
+    color: #fff;
+    text-decoration: none;
+    background-color: transparent;
+    border: 1px solid #fff;
+    border-radius: t.$radius-md;
+    transition:
+      background-color t.$transition-fast,
+      border-color t.$transition-fast;
+
+    @include m.hover {
+      color: #fff;
+      text-decoration: none;
+      background-color: t.$color-accent;
+      border-color: t.$color-accent;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
+  }
+
+  // --- Товарное изображение (только desktop — как на референсах) ------------------
+  &__image {
+    display: none;
+
+    @include m.media-up(xl) {
+      position: absolute;
+      right: 3%;
+      bottom: 0;
+      z-index: 1;
+      display: flex;
+      align-items: flex-end;
+      height: 88%;
+      max-width: 50%;
+      pointer-events: none;
+
+      img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        object-position: bottom;
+      }
+    }
+  }
+
+  // --- Пагинация (scoped, без влияния на другие swiper) ----------------------------
+  .swiper-pagination {
+    z-index: 3;
+    bottom: t.$spacer * 0.75;
+  }
+
+  .swiper-pagination-bullet {
+    background: #fff;
+    opacity: 0.55;
+    transition: opacity t.$transition-fast;
+  }
+
+  .swiper-pagination-bullet-active {
+    opacity: 1;
+  }
+
+  // --- Стрелки навигации (только с md — на mobile свайп) ---------------------------
+  // Скрыты по умолчанию: плавно появляются при наведении на .swiper-wrapper
+  // и при фокусе внутри слайдера (доступность с клавиатуры).
+  // Селектор-потомок .hero-slider .hero-slider__nav: нужна специфичность (0,2,0),
+  // иначе стили swiper/css/navigation перебивают display и ::after
+  .hero-slider__nav {
+    z-index: 3;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    padding: 0;
+    color: #fff;
+    cursor: pointer;
+    background: rgb(0 0 0 / 35%);
+    border: 0;
+    border-radius: t.$radius-pill;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity t.$transition-base,
+      background-color t.$transition-fast;
+
+    &::after {
+      content: none; // отключаем стрелки-шрифт Swiper — используем Icon
+    }
+
+    // swiper/css/navigation растягивает svg на всю кнопку — возвращаем размер иконки
+    svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    @include m.media-up(md) {
+      display: flex;
+    }
+
+    @include m.hover {
+      background: rgb(0 0 0 / 60%);
+    }
+
+    &:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
+  }
+
+  // Появление стрелок: hover на контейнере слайдера или фокус внутри него.
+  // Не .swiper-wrapper:hover ~ — при наведении на саму стрелку hover
+  // с wrapper снимается (кнопка не потомок wrapper) и кнопка гаснет под курсором
+  &:hover .hero-slider__nav,
+  &:focus-within .hero-slider__nav {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-slider__nav {
+      transition: none;
+    }
+  }
+}

@@ -1,0 +1,18 @@
+---
+/**
+ * CatalogLink.astro — заметная кнопка-ссылка «Каталог».
+ * Выпадающее меню категорий будет добавлено на следующих этапах.
+ */
+import Icon from '../../ui/Icon.astro';
+
+interface Props {
+  href?: string;
+}
+
+const { href = '/catalog/' } = Astro.props;
+---
+
+<a class="catalog-link" href={href}>
+  <Icon name="menu" size={20} />
+  <span>Каталог</span>
+</a>

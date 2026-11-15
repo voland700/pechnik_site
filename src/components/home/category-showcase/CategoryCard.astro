@@ -1,0 +1,30 @@
+---
+/**
+ * CategoryCard.astro — карточка категории каталога (вертикальная).
+ *
+ * Изображение и название — ссылки на страницу категории. До интеграции
+ * с CMS используется заглушка href="#" (по требованию заказчика);
+ * при посадке на 1С-Битрикс href заменяется URL раздела (поле url).
+ * Изображение декоративное (alt=""): название продублировано текстом рядом.
+ */
+import type { ShowcaseItem } from '../../../types/showcase';
+
+interface Props extends ShowcaseItem {}
+
+const { name, img, url } = Astro.props;
+const src = img.startsWith('/') ? img : `/${img}`;
+const href = url || '#';
+---
+
+<div class="category-card">
+  <a class="category-card__media" href={href} tabindex="-1" aria-hidden="true">
+    <img
+      class="category-card__image"
+      src={src}
+      alt=""
+      loading="lazy"
+      decoding="async"
+    />
+  </a>
+  <a class="category-card__title" href={href}>{name}</a>
+</div>

@@ -1,0 +1,159 @@
+// -----------------------------------------------------------------------------
+// Мобильное выдвижное меню (MobileMenu.astro + scripts/modules/mobile-menu.ts)
+// Анимации — только transform и opacity; prefers-reduced-motion учитывается.
+// -----------------------------------------------------------------------------
+@use '../abstracts/tokens' as t;
+@use '../abstracts/mixins' as m;
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: t.$z-modal;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.mobile-menu__overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgb(37 43 51 / 50%);
+  opacity: 0;
+  transition: opacity t.$transition-base;
+}
+
+.mobile-menu__panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(360px, 88%);
+  padding: t.$spacer (t.$spacer * 1.25) (t.$spacer * 2);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background-color: t.$color-surface;
+  box-shadow: t.$shadow-lg;
+  transform: translateX(-100%);
+  transition: transform t.$transition-base;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.mobile-menu--open {
+  .mobile-menu__overlay {
+    opacity: 1;
+  }
+
+  .mobile-menu__panel {
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu__overlay,
+  .mobile-menu__panel {
+    transition: none;
+  }
+}
+
+// Шапка панели
+.mobile-menu__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: t.$spacer;
+  padding-bottom: t.$spacer;
+  border-bottom: 1px solid t.$color-border;
+}
+
+.mobile-menu__logo {
+  width: 40px;
+  height: auto;
+}
+
+.mobile-menu__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  color: t.$color-primary;
+  background: none;
+  border: 0;
+  border-radius: t.$radius-md;
+  cursor: pointer;
+  transition: color t.$transition-fast;
+
+  @include m.hover {
+    color: t.$color-accent-hover;
+  }
+
+  @include m.focus-visible;
+}
+
+// Навигация
+.mobile-menu__nav {
+  padding-block: t.$spacer * 0.5;
+  border-bottom: 1px solid t.$color-border;
+}
+
+.mobile-menu__list {
+  @include m.list-reset;
+}
+
+.mobile-menu__link {
+  display: block;
+  padding-block: t.$spacer * 0.75;
+  font-weight: t.$font-weight-semibold;
+  color: t.$color-text;
+  text-decoration: none;
+  transition: color t.$transition-fast;
+
+  @include m.hover {
+    color: t.$color-accent-hover;
+  }
+
+  @include m.focus-visible;
+
+  &:active {
+    color: t.$color-primary-dark;
+  }
+
+  &.active {
+    color: t.$color-accent-hover;
+  }
+}
+
+// Вход / ЛК и обратный звонок
+.mobile-menu__account {
+  padding-block: t.$spacer;
+  border-bottom: 1px solid t.$color-border;
+}
+
+.mobile-menu__callback {
+  padding-block: t.$spacer 0;
+
+  .btn {
+    width: 100%;
+  }
+}
+
+// Режим работы
+.mobile-menu__hours {
+  padding-block: t.$spacer;
+  border-bottom: 1px solid t.$color-border;
+  font-size: t.$font-size-sm;
+}
+
+// Контакты магазинов
+.mobile-menu__stores {
+  display: grid;
+  gap: t.$spacer * 1.25;
+  padding-top: t.$spacer;
+}

@@ -1,0 +1,106 @@
+@use '../abstracts/tokens' as t;
+@use '../abstracts/mixins' as m;
+
+.product-card-demo {
+  min-height: 100dvh;
+  background-color: t.$color-bg;
+
+  &__header {
+    padding-block: t.$spacer * 2 t.$spacer * 2.5;
+    color: t.$color-surface;
+    background-color: t.$color-primary;
+
+    h1 {
+      margin: t.$spacer * 0.5 0 t.$spacer * 0.75;
+      color: inherit;
+      font-size: t.$font-size-h2;
+    }
+
+    p {
+      max-width: 70ch;
+      margin: 0;
+      line-height: t.$line-height-base;
+    }
+  }
+
+  &__back {
+    display: inline-flex;
+    min-height: t.$spacer * 2.75;
+    align-items: center;
+    color: t.$color-surface;
+    font-size: t.$font-size-sm;
+    text-decoration: none;
+
+    @include m.hover {
+      text-decoration: underline;
+    }
+
+    @include m.focus-visible;
+  }
+
+  &__section {
+    padding-block: t.$spacer * 3;
+
+    h2 {
+      margin-bottom: t.$spacer * 1.5;
+      font-size: t.$font-size-h3;
+    }
+  }
+
+  &__section--alt {
+    background-color: t.$color-surface-alt;
+  }
+
+  &__description {
+    max-width: 70ch;
+    margin: calc(t.$spacer * -0.5) 0 t.$spacer * 1.5;
+    color: t.$color-text-secondary;
+  }
+
+  &__grid {
+    @include m.list-reset;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: t.$spacer * 1.5 t.$spacer;
+    align-items: stretch;
+
+    @include m.media-up(sm) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include m.media-up(md) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    @include m.media-up(lg) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    @include m.media-up(xl) {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      column-gap: t.$spacer * 0.5;
+    }
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__state {
+    flex: none;
+    margin: 0 0 t.$spacer * 0.5;
+    color: t.$color-text-secondary;
+    font-size: t.$font-size-xs;
+    line-height: 1.4;
+  }
+
+  &__item > .product-card {
+    flex: 1;
+  }
+
+  &__narrow {
+    width: min(100%, 210px);
+  }
+}

@@ -1,0 +1,66 @@
+---
+/**
+ * Icon.astro — inline SVG-иконка по имени файла из src/assets/icons/inline/.
+ *
+ * Использование:
+ *   <Icon name="search" />
+ *   <Icon name="cart" size={32} class="header__icon" />
+ *   <Icon name="phone" title="Телефон" />  — доступный режим
+ *
+ * SVG встраиваются в HTML на этапе сборки, runtime-запросов нет.
+ * Цвет наследуется от currentColor.
+ */
+interface Props {
+  /** Имя файла без расширения из src/assets/icons/inline/ */
+  name: string;
+  /** Размер в px (width/height). По умолчанию 24 */
+  size?: number | string;
+  /** Дополнительные CSS-классы */
+  class?: string;
+  /** Доступное название. Если не задано, иконка декоративная (aria-hidden) */
+  title?: string;
+}
+
+const { name, size = 24, class: className, title } = Astro.props;
+
+const icons = import.meta.glob<string>('../../assets/icons/inline/*.svg', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+});
+
+const raw = icons[`../../assets/icons/inline/${name}.svg`];
+if (!raw) {
+  throw new Error(
+    `Icon.astro: иконка "${name}" не найдена в src/assets/icons/inline/. ` +
+      `Доступные: ${Object.keys(icons)
+        .map((p) => p.split('/').pop()?.replace('.svg', ''))
+        .join(', ')}`,
+  );
+}
+
+const viewBox = raw.match(/viewBox="([^"]+)"/)?.[1] ?? '0 0 24 24';
+const inner = raw
+  .replace(/<svg[^>]*>/i, '')
+  .replace(/<\/svg>\s*$/i, '')
+  .trim();
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox={viewBox}
+  width={size}
+  height={size}
+  class:list={['svg-icon', className]}
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden={title ? undefined : 'true'}
+  role={title ? 'img' : undefined}
+  aria-label={title}
+>
+  {title && <title>{title}</title>}
+  <Fragment set:html={inner} />
+</svg>

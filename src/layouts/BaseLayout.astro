@@ -1,0 +1,49 @@
+---
+/**
+ * BaseLayout.astro — базовый HTML5-шаблон страницы.
+ *
+ * Подключает:
+ * - общий бандл стилей (SCSS + Bootstrap + стили библиотек из JS-модулей);
+ * - CSS иконочного шрифта (виртуальный модуль vite-svg-2-webfont);
+ * - клиентский JavaScript src/scripts/main.ts (type="module", deferred);
+ * - favicon.
+ *
+ * Использование:
+ *   <BaseLayout title="..." description="...">
+ *     ...содержимое страницы...
+ *   </BaseLayout>
+ */
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = '' } = Astro.props;
+
+// Единый бандл стилей: собственные стили + иконочный шрифт +
+// CSS сторонних библиотек (попадают в общий style.css при сборке).
+import '../styles/main.scss';
+import 'virtual:vite-svg-2-webfont.css';
+import '@fancyapps/ui/dist/fancybox/fancybox.css';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/effect-fade';
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+  </head>
+  <body>
+    <slot />
+    <script>
+      import '../scripts/main.ts';
+    </script>
+  </body>
+</html>

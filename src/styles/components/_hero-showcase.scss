@@ -1,0 +1,78 @@
+// -----------------------------------------------------------------------------
+// HeroShowcase — сетка рекламного блока главной страницы.
+// Единая DOM-последовательность (слайдер → баннеры 1..4), визуальный
+// порядок задаётся grid-позиционированием (без CSS order).
+//
+// <768px:        слайдер, под ним баннеры в один столбец
+// 768–1199px:    слайдер на всю ширину, баннеры 2 × 2
+// ≥1200px:       баннеры 1–2 слева, слайдер по центру, баннеры 3–4 справа
+// -----------------------------------------------------------------------------
+@use '../abstracts/tokens' as t;
+@use '../abstracts/mixins' as m;
+
+.hero-showcase {
+  padding-block: t.$spacer;
+
+  @include m.media-up(md) {
+    padding-block: t.$spacer * 1.25;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: t.$spacer;
+
+    @include m.media-up(md) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include m.media-up(xl) {
+      grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 3.2fr)
+        minmax(0, 1fr);
+      grid-template-rows: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+  }
+
+  // Слайдер: на mobile/tablet — первым на всю ширину,
+  // на desktop — центральная колонка на всю высоту сетки.
+  // min-width: 0 — защита от раскручивания ширины grid-трека Swiper'ом
+  &__slider {
+    min-width: 0;
+
+    @include m.media-up(md) {
+      grid-column: 1 / -1;
+    }
+
+    @include m.media-up(xl) {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+    }
+  }
+
+  // Боковые колонки desktop: 1 — слева сверху, 2 — слева снизу,
+  // 3 — справа сверху, 4 — справа снизу (порядок из массива данных)
+  @include m.media-up(xl) {
+    &__banner--1 {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    &__banner--2 {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    &__banner--3 {
+      grid-column: 3;
+      grid-row: 1;
+    }
+
+    &__banner--4 {
+      grid-column: 3;
+      grid-row: 2;
+    }
+  }
+}

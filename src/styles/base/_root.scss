@@ -1,0 +1,65 @@
+// -----------------------------------------------------------------------------
+// CSS Custom Properties — дублируют SCSS-токены для использования
+// вне SCSS (inline SVG, JS, стили CMS-виджетов).
+// -----------------------------------------------------------------------------
+@use '../abstracts/tokens' as t;
+
+:root {
+  // Цвета
+  --color-bg: #{t.$color-bg};
+  --color-surface: #{t.$color-surface};
+  --color-surface-alt: #{t.$color-surface-alt};
+  --color-text: #{t.$color-text};
+  --color-text-secondary: #{t.$color-text-secondary};
+  --color-border: #{t.$color-border};
+  --color-primary: #{t.$color-primary};
+  --color-primary-dark: #{t.$color-primary-dark};
+  --color-accent: #{t.$color-accent};
+  --color-accent-hover: #{t.$color-accent-hover};
+  --color-accent-bg: #{t.$color-accent-bg};
+  --color-warm: #{t.$color-warm};
+  --color-terracotta: #{t.$color-terracotta};
+  --color-link: #{t.$color-link};
+  --color-link-hover: #{t.$color-link-hover};
+  --color-success: #{t.$color-success};
+  --color-error: #{t.$color-error};
+  --color-status-closed: #{t.$color-status-closed};
+
+  // Типографика
+  --font-family-base: #{t.$font-family-base};
+  --font-size-base: #{t.$font-size-base};
+  --line-height-base: #{t.$line-height-base};
+  --line-height-heading: #{t.$line-height-heading};
+
+  // Отступы
+  @each $key, $value in t.$spacers {
+    --spacer-#{$key}: #{$value};
+  }
+
+  // Радиусы
+  --radius-sm: #{t.$radius-sm};
+  --radius-md: #{t.$radius-md};
+  --radius-lg: #{t.$radius-lg};
+  --radius-xl: #{t.$radius-xl};
+  --radius-pill: #{t.$radius-pill};
+
+  // Тени
+  --shadow-sm: #{t.$shadow-sm};
+  --shadow-md: #{t.$shadow-md};
+  --shadow-lg: #{t.$shadow-lg};
+
+  // Переходы
+  --transition-fast: #{t.$transition-fast};
+  --transition-base: #{t.$transition-base};
+
+  // Z-index
+  --z-header: #{t.$z-header};
+  --z-dropdown: #{t.$z-dropdown};
+  --z-overlay: #{t.$z-overlay};
+  --z-modal: #{t.$z-modal};
+  --z-toast: #{t.$z-toast};
+
+  // Layout
+  --container-max: #{t.$container-max};
+  --header-height: #{t.$header-height};
+}

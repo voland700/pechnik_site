@@ -1,0 +1,4 @@
+// Стили сторонних библиотек.
+// CSS библиотек (Fancybox, Swiper, SweetAlert2) импортируется в соответствующих
+// JS-модулях src/scripts/modules/* и попадает в общий style.css при сборке.
+@forward 'bootstrap';

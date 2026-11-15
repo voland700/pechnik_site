@@ -1,0 +1,40 @@
+---
+/**
+ * HeroShowcase.astro — единый рекламный блок главной страницы:
+ * центральный Hero Slider + статичные баннеры.
+ *
+ * Единая последовательность DOM (слайдер, затем баннеры 1→4),
+ * визуальное расположение задаёт CSS Grid (стили — components/_hero-showcase.scss):
+ * - ≥1200px: баннеры 1–2 слева, слайдер по центру, баннеры 3–4 справа;
+ * - 768–1199px: слайдер сверху, баннеры сеткой 2 × 2;
+ * - <768px: слайдер сверху, баннеры в один столбец.
+ *
+ * Использование: <HeroShowcase slides={sliderData} banners={bannerData} />
+ */
+import type { HeroSlideData, HeroBannerData } from '../../../types/hero-slider';
+import HeroSlider from './HeroSlider.astro';
+import HeroBanner from './HeroBanner.astro';
+
+interface Props {
+  slides: HeroSlideData[];
+  banners?: HeroBannerData[];
+}
+
+const { slides, banners = [] } = Astro.props;
+---
+
+<section class="hero-showcase" aria-label="Рекламные предложения печного центра">
+  <div class="container">
+    <div class="hero-showcase__grid">
+      <HeroSlider slides={slides} class="hero-showcase__slider" />
+      {
+        banners.map((banner, index) => (
+          <HeroBanner
+            {...banner}
+            class={`hero-showcase__banner hero-showcase__banner--${index + 1}`}
+          />
+        ))
+      }
+    </div>
+  </div>
+</section>

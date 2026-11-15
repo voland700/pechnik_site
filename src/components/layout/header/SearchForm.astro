@@ -1,0 +1,42 @@
+---
+/**
+ * SearchForm.astro — форма поиска по каталогу.
+ *
+ * Обычная HTML-форма (method="get"): отправка по Enter, работа без JS.
+ * URL поисковой страницы и имя GET-параметра настраиваются через props —
+ * при интеграции будут соответствовать механизму поиска Битрикс.
+ */
+import Icon from '../../ui/Icon.astro';
+
+interface Props {
+  /** URL страницы поисковой выдачи (предварительный) */
+  action?: string;
+  /** Имя GET-параметра запроса */
+  param?: string;
+  /** Уникальный id поля (на странице две формы: desktop и mobile) */
+  id: string;
+  class?: string;
+}
+
+const { action = '/search/', param = 'q', id, class: className } = Astro.props;
+---
+
+<form
+  class:list={['search-form', className]}
+  role="search"
+  method="get"
+  action={action}
+>
+  <input
+    class="search-form__input"
+    type="search"
+    name={param}
+    id={id}
+    placeholder="Поиск по каталогу"
+    aria-label="Поиск по каталогу"
+    autocomplete="off"
+  />
+  <button class="search-form__submit" type="submit" aria-label="Найти">
+    <Icon name="search" size={20} />
+  </button>
+</form>

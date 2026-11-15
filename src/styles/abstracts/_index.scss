@@ -1,0 +1,5 @@
+// Точка входа слоя abstracts: подключать как `@use 'abstracts' as *;`
+// или выборочно `@use 'abstracts/tokens' as t;`
+@forward 'tokens';
+@forward 'functions';
+@forward 'mixins';

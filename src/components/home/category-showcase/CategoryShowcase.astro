@@ -1,0 +1,40 @@
+---
+/**
+ * CategoryShowcase.astro — витрина категорий каталога на главной странице.
+ *
+ * Сетка CSS Grid: 5 колонок от 1200px, 4 от 992px, 3 от 768px, 2 ниже.
+ * Работает без JavaScript. Данные приходят через props — компонент
+ * не привязан к конкретному массиву.
+ *
+ * Использование: <CategoryShowcase items={showcaseData} />
+ */
+import type { ShowcaseItem } from '../../../types/showcase';
+import CategoryCard from './CategoryCard.astro';
+
+interface Props {
+  items: ShowcaseItem[];
+  /** Заголовок секции */
+  title?: string;
+}
+
+const { items, title = 'Каталог товаров' } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <section class="category-showcase" aria-labelledby="category-showcase-heading">
+      <div class="container">
+        <h2 class="category-showcase__heading" id="category-showcase-heading">
+          {title}
+        </h2>
+        <ul class="category-showcase__grid">
+          {items.map((item) => (
+            <li class="category-showcase__item shine">
+              <CategoryCard {...item} />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}

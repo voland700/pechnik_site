@@ -1,0 +1,28 @@
+---
+/**
+ * AccountLink.astro — ссылка «Вход» / «Личный кабинет».
+ *
+ * Состояние авторизации передаётся через props (на этапе CMS — с сервера).
+ * Авторизация и регистрация на текущем этапе не реализуются.
+ */
+import Icon from '../../ui/Icon.astro';
+
+interface Props {
+  isAuthenticated?: boolean;
+  /** URL личного кабинета (предварительный) */
+  accountUrl?: string;
+  /** URL страницы входа (предварительный) */
+  loginUrl?: string;
+}
+
+const {
+  isAuthenticated = false,
+  accountUrl = '/account/',
+  loginUrl = '/login/',
+} = Astro.props;
+---
+
+<a class="account-link" href={isAuthenticated ? accountUrl : loginUrl}>
+  <Icon name="user" size={18} />
+  <span>{isAuthenticated ? 'Личный кабинет' : 'Вход'}</span>
+</a>

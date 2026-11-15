@@ -1,0 +1,48 @@
+---
+/**
+ * HeroSlider.astro — основной рекламный слайдер главной страницы.
+ *
+ * Swiper инициализируется модулем src/scripts/modules/hero-slider.ts
+ * по атрибуту [data-hero-slider] (эффект Fade + Parallax, Autoplay,
+ * клавиатура, reduced motion). Без JS показывается первый слайд.
+ */
+import type { HeroSlideData } from '../../../types/hero-slider';
+import HeroSlide from './HeroSlide.astro';
+import Icon from '../../ui/Icon.astro';
+
+interface Props {
+  slides: HeroSlideData[];
+  class?: string;
+}
+
+const { slides, class: className } = Astro.props;
+---
+
+<div
+  class:list={['hero-slider', 'swiper', className]}
+  data-hero-slider
+  role="region"
+  aria-roledescription="carousel"
+  aria-label="Рекламные предложения"
+>
+  <div class="swiper-wrapper">
+    {slides.map((slide, index) => <HeroSlide slide={slide} isFirst={index === 0} />)}
+  </div>
+
+  <div class="hero-slider__pagination swiper-pagination"></div>
+
+  <button
+    type="button"
+    class="hero-slider__nav hero-slider__nav--prev swiper-button-prev"
+    aria-label="Предыдущий слайд"
+  >
+    <Icon name="chevron-left" size={22} />
+  </button>
+  <button
+    type="button"
+    class="hero-slider__nav hero-slider__nav--next swiper-button-next"
+    aria-label="Следующий слайд"
+  >
+    <Icon name="chevron-right" size={22} />
+  </button>
+</div>

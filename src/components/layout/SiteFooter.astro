@@ -1,0 +1,36 @@
+---
+/**
+ * SiteFooter.astro — подвал сайта в фирменном сланцевом цвете.
+ */
+import site from '../../data/site.json';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <p class="site-footer__title">{site.name}</p>
+        <p>{site.tagline}</p>
+      </div>
+      <div class="col-md-4">
+        <p class="site-footer__title">Навигация</p>
+        <ul class="site-footer__nav">
+          {site.nav.map((item) => <li><a href={item.href}>{item.title}</a></li>)}
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <p class="site-footer__title">Контакты</p>
+        <ul class="site-footer__nav">
+          <li><a href={`tel:${site.phone.replace(/[^+\d]/g, '')}`}>{site.phone}</a></li>
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li>{site.address}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      © {year} {site.name}. Демонстрационная сборка Astro Starter.
+    </div>
+  </div>
+</footer>

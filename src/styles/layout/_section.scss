@@ -1,0 +1,21 @@
+// -----------------------------------------------------------------------------
+// Секции страницы
+// -----------------------------------------------------------------------------
+@use '../abstracts/tokens' as t;
+@use '../abstracts/mixins' as m;
+
+.section {
+  padding-block: t.$spacer * 2.5;
+
+  @include m.media-up(md) {
+    padding-block: t.$spacer * 3.5;
+  }
+
+  &--alt {
+    background-color: t.$color-surface-alt;
+  }
+}
+
+.section__title {
+  margin-bottom: t.$spacer * 1.5;
+}

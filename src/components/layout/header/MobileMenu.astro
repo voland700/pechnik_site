@@ -1,0 +1,96 @@
+---
+/**
+ * MobileMenu.astro — единая выдвижная панель (слева) для мобильной версии.
+ *
+ * Содержимое: фирменный блок, кнопка закрытия, информационное меню,
+ * вход/личный кабинет, обратный звонок, режим работы, контакты обоих центров.
+ * Интерактивность — src/scripts/modules/mobile-menu.ts (открытие/закрытие,
+ * Escape, overlay, удержание фокуса, блокировка прокрутки).
+ */
+import { topNavigation } from '../../../data/navigation';
+import { stores } from '../../../data/contacts';
+import logo from '../../../../assets/logo.svg';
+import Icon from '../../ui/Icon.astro';
+import AccountLink from './AccountLink.astro';
+import WorkingHours from './WorkingHours.astro';
+import StoreContacts from './StoreContacts.astro';
+
+interface Props {
+  activeMenu?: string;
+  isAuthenticated?: boolean;
+  accountUrl?: string;
+  loginUrl?: string;
+}
+
+const { activeMenu, isAuthenticated = false, accountUrl, loginUrl } = Astro.props;
+---
+
+<div class="mobile-menu" id="mobile-menu" data-mobile-menu hidden>
+  <div class="mobile-menu__overlay" data-menu-close aria-hidden="true"></div>
+
+  <aside
+    class="mobile-menu__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Мобильное меню"
+    tabindex="-1"
+  >
+    <div class="mobile-menu__head">
+      <img
+        class="mobile-menu__logo"
+        src={logo.src}
+        width={logo.width}
+        height={logo.height}
+        alt="Печной центр"
+      />
+      <button
+        class="mobile-menu__close"
+        type="button"
+        data-menu-close
+        aria-label="Закрыть меню"
+      >
+        <Icon name="close" size={24} />
+      </button>
+    </div>
+
+    <nav class="mobile-menu__nav" aria-label="Информационное меню">
+      <ul class="mobile-menu__list">
+        {
+          topNavigation.map((item) => (
+            <li>
+              <a
+                class:list={['mobile-menu__link', { active: item.id === activeMenu }]}
+                href={item.href}
+                aria-current={item.id === activeMenu ? 'page' : undefined}
+              >
+                {item.title}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="mobile-menu__account">
+      <AccountLink
+        isAuthenticated={isAuthenticated}
+        {...(accountUrl ? { accountUrl } : {})}
+        {...(loginUrl ? { loginUrl } : {})}
+      />
+    </div>
+
+    <div class="mobile-menu__callback">
+      <button class="btn btn--accent" type="button" data-action="callback">
+        Обратный звонок
+      </button>
+    </div>
+
+    <div class="mobile-menu__hours">
+      <WorkingHours />
+    </div>
+
+    <div class="mobile-menu__stores">
+      {stores.map((store) => <StoreContacts store={store} />)}
+    </div>
+  </aside>
+</div>

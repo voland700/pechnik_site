@@ -1,0 +1,125 @@
+---
+/**
+ * Секция «Избранные товары»: статические панели ProductCard и доступные вкладки.
+ * Данные приходят через props, поэтому компонент не зависит от источника CMS.
+ */
+import ProductCard from '../../catalog/ProductCard.astro';
+import type { ProductItem } from '../../../types/product';
+
+export interface FeaturedCategory {
+  category: string;
+  products: ProductItem[];
+}
+
+interface Props {
+  title?: string;
+  categories: FeaturedCategory[];
+  maxProducts?: number;
+  /** Индекс категории (от 0) или её точное название. */
+  initialTab?: number | string;
+}
+
+const {
+  title = 'Избранные товары',
+  categories,
+  maxProducts = 10,
+  initialTab = 0,
+} = Astro.props;
+
+// UUID выполняется только во время статической генерации Astro.
+// Он сохраняет уникальность id при нескольких экземплярах на странице.
+const instanceId = crypto.randomUUID();
+const requestedIndex = typeof initialTab === 'string'
+  ? categories.findIndex(({ category }) => category === initialTab)
+  : initialTab;
+const activeIndex = Number.isInteger(requestedIndex)
+  && requestedIndex >= 0
+  && requestedIndex < categories.length
+  ? requestedIndex
+  : 0;
+const limit = Number.isFinite(maxProducts)
+  ? Math.max(0, Math.min(10, Math.floor(maxProducts)))
+  : 10;
+---
+
+{
+  categories.length > 0 && (
+    <section
+      class="featured-products"
+      aria-labelledby={`featured-products-${instanceId}-heading`}
+      data-featured-tabs
+    >
+      <div class="container">
+        <h2 class="featured-products__heading" id={`featured-products-${instanceId}-heading`}>
+          {title}
+        </h2>
+
+        <div
+          class="featured-products__tabs"
+          role="tablist"
+          aria-label={`${title}: категории`}
+          data-featured-tablist
+        >
+          {categories.map(({ category }, index) => {
+            const isActive = index === activeIndex;
+            return (
+              <button
+                class:list={[
+                  'featured-products__tab',
+                  isActive && 'featured-products__tab--active',
+                  isActive && 'active',
+                ]}
+                id={`featured-products-${instanceId}-tab-${index}`}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                aria-controls={`featured-products-${instanceId}-panel-${index}`}
+                tabindex={isActive ? 0 : -1}
+                data-featured-tab={index}
+              >
+                {category}
+              </button>
+            );
+          })}
+        </div>
+
+        <div class="featured-products__panels">
+          {categories.map(({ category, products }, index) => {
+            const isActive = index === activeIndex;
+            const visibleProducts = products.slice(0, limit);
+            return (
+              <div
+                class:list={['featured-products__panel', isActive && 'behold']}
+                id={`featured-products-${instanceId}-panel-${index}`}
+                role="tabpanel"
+                aria-labelledby={`featured-products-${instanceId}-tab-${index}`}
+                hidden={!isActive}
+                data-featured-panel={index}
+              >
+                <h3 class="featured-products__panel-title">{category}</h3>
+                {visibleProducts.length > 0 ? (
+                  <div class="featured-products__grid">
+                    {visibleProducts.map((item) => (
+                      <ProductCard product={item} />
+                    ))}
+                  </div>
+                ) : (
+                  <p class="featured-products__empty">В этой категории пока нет товаров</p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <noscript>
+        <style is:inline>
+          .featured-products__tabs { display: none; }
+          .featured-products__panel[hidden] { display: block !important; }
+          .featured-products__panel + .featured-products__panel { margin-top: 32px; }
+          .featured-products__panel-title { display: block; }
+        </style>
+      </noscript>
+    </section>
+  )
+}

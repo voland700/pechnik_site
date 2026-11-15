@@ -1,0 +1,18 @@
+[
+  { "name": "Тёплый молочный", "hex": "#FBFAF8", "role": "Фон страниц", "var": "--color-bg" },
+  { "name": "Белый", "hex": "#FFFFFF", "role": "Основная поверхность", "var": "--color-surface" },
+  { "name": "Светлый каменный", "hex": "#F5F3EE", "role": "Дополнительный фон", "var": "--color-surface-alt" },
+  { "name": "Тёмный графит", "hex": "#252B33", "role": "Основной текст", "var": "--color-text" },
+  { "name": "Серо-синий", "hex": "#657389", "role": "Вторичный текст", "var": "--color-text-secondary" },
+  { "name": "Светло-серый", "hex": "#E7E7E7", "role": "Разделители", "var": "--color-border" },
+  { "name": "Сланцевый", "hex": "#4F5A6C", "role": "Основной фирменный", "var": "--color-primary" },
+  { "name": "Глубокий сланец", "hex": "#444E5D", "role": "Hover, тёмные секции", "var": "--color-primary-dark" },
+  { "name": "Оранжевое пламя", "hex": "#FF9C00", "role": "Главный акцент", "var": "--color-accent" },
+  { "name": "Тёмный янтарь", "hex": "#E68800", "role": "Hover акцента", "var": "--color-accent-hover" },
+  { "name": "Светлый абрикосовый", "hex": "#FFF3DF", "role": "Акцентный фон", "var": "--color-accent-bg" },
+  { "name": "Песочно-жёлтый", "hex": "#F7C735", "role": "Мелкие метки", "var": "--color-warm" },
+  { "name": "Терракота", "hex": "#D27347", "role": "Акции, скидки", "var": "--color-terracotta" },
+  { "name": "Ссылка", "hex": "#AC600B", "role": "Текстовые ссылки", "var": "--color-link" },
+  { "name": "В наличии", "hex": "#027A3A", "role": "Успех", "var": "--color-success" },
+  { "name": "Ошибка", "hex": "#C63C2F", "role": "Ошибка", "var": "--color-error" }
+]

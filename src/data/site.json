@@ -1,0 +1,13 @@
+{
+  "name": "Pechnik.su",
+  "tagline": "Материалы для печей, каминов и барбекю",
+  "phone": "+7 (495) 000-00-00",
+  "email": "info@pechnik.su",
+  "address": "Москва, склад и шоурум",
+  "nav": [
+    { "title": "Каталог", "href": "#catalog" },
+    { "title": "Печи и камины", "href": "#stoves" },
+    { "title": "Доставка", "href": "#delivery" },
+    { "title": "Контакты", "href": "#contacts" }
+  ]
+}

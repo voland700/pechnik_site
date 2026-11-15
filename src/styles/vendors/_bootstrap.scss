@@ -1,0 +1,70 @@
+// -----------------------------------------------------------------------------
+// Bootstrap 5.2 — точечная сборка: только сетка, reboot, mixins и
+// согласованный минимум утилит. Визуальные компоненты и JS НЕ подключаются.
+//
+// Bootstrap 5.2 внутри построен на @import, поэтому этот файл — единственное
+// место в проекте, где осознанно используется @import.
+// -----------------------------------------------------------------------------
+
+@use 'sass:map';
+
+// 1. Функции Bootstrap (нужны его переменным)
+@import 'bootstrap/scss/functions';
+
+// 2. Централизованные переопределения сетки и контейнеров.
+//    Менять breakpoints и контейнеры ТОЛЬКО здесь.
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+);
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1320px,
+);
+$grid-columns: 12;
+$grid-gutter-width: 1.5rem;
+
+// 3. Ядро переменных, карт и миксинов (breakpoint-миксины включены)
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/maps';
+@import 'bootstrap/scss/mixins';
+
+// 4. CSS-переменные Bootstrap (нужны сетке)
+@import 'bootstrap/scss/root';
+
+// 5. Reboot — нормализация
+@import 'bootstrap/scss/reboot';
+
+// 6. Контейнеры и 12-колоночная сетка:
+//    .container, .container-fluid, .row, .col-*, .col-{sm..xxl}-*
+@import 'bootstrap/scss/containers';
+@import 'bootstrap/scss/grid';
+
+// 7. Хелперы: только visually-hidden (доступность)
+@import 'bootstrap/scss/helpers/visually-hidden';
+
+// 8. Согласованный минимум утилит: раскладка без визуальных компонентов.
+//    Карту утилит сужаем до явного списка перед генерацией.
+@import 'bootstrap/scss/utilities';
+
+$utilities: (
+  'display': map.get($utilities, 'display'),
+  'flex': map.get($utilities, 'flex'),
+  'flex-direction': map.get($utilities, 'flex-direction'),
+  'flex-wrap': map.get($utilities, 'flex-wrap'),
+  'justify-content': map.get($utilities, 'justify-content'),
+  'align-items': map.get($utilities, 'align-items'),
+  'align-self': map.get($utilities, 'align-self'),
+  'gap': map.get($utilities, 'gap'),
+  'order': map.get($utilities, 'order'),
+  'text-align': map.get($utilities, 'text-align'),
+);
+
+@import 'bootstrap/scss/utilities/api';

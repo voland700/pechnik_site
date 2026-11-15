@@ -1,0 +1,132 @@
+// -----------------------------------------------------------------------------
+// Стили демонстрационной страницы (технический UI Kit).
+// Это НЕ дизайн главной страницы магазина.
+// -----------------------------------------------------------------------------
+@use '../abstracts/tokens' as t;
+@use '../abstracts/mixins' as m;
+
+// Панель-пример произвольного блока
+.demo-panel {
+  padding: t.$spacer * 1.5;
+  background-color: t.$color-surface;
+  border: 1px solid t.$color-border;
+  border-radius: t.$radius-lg;
+  box-shadow: t.$shadow-sm;
+}
+
+// Палитра
+.palette {
+  @include m.list-reset;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: t.$spacer;
+}
+
+.palette__item {
+  overflow: hidden;
+  background-color: t.$color-surface;
+  border: 1px solid t.$color-border;
+  border-radius: t.$radius-md;
+}
+
+.palette__swatch {
+  height: 72px;
+  border-bottom: 1px solid t.$color-border;
+}
+
+.palette__meta {
+  padding: (t.$spacer * 0.5) (t.$spacer * 0.75);
+  font-size: t.$font-size-xs;
+}
+
+.palette__name {
+  display: block;
+  font-weight: t.$font-weight-semibold;
+}
+
+.palette__hex {
+  color: t.$color-text-secondary;
+}
+
+// Демо сетки
+.grid-demo [class^='col'] > div,
+.grid-demo [class*=' col'] > div {
+  padding: t.$spacer;
+  text-align: center;
+  background-color: t.$color-accent-bg;
+  border: 1px solid t.$color-accent;
+  border-radius: t.$radius-sm;
+}
+
+// Swiper
+.demo-swiper {
+  overflow: hidden;
+  border-radius: t.$radius-lg;
+
+  .swiper-slide {
+    position: relative;
+    height: 320px;
+    // Обрезаем parallax-изображение (110% ширины), чтобы не было
+    // горизонтального переполнения страницы на мобильных
+    overflow: hidden;
+
+    @include m.media-up(md) {
+      height: 420px;
+    }
+
+    img {
+      position: absolute;
+      inset: 0;
+      width: 110%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}
+
+.demo-swiper__caption {
+  position: absolute;
+  right: 0;
+  bottom: t.$spacer * 2;
+  left: 0;
+  z-index: 1;
+  padding-inline: t.$spacer * 2;
+  color: #fff;
+  text-shadow: 0 1px 4px rgb(0 0 0 / 40%);
+}
+
+.demo-swiper__title {
+  margin: 0 0 t.$spacer * 0.5;
+  color: #fff;
+}
+
+// Fancybox
+.demo-gallery__thumb {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: t.$radius-md;
+  box-shadow: t.$shadow-sm;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: transform t.$transition-base;
+  }
+
+  @include m.hover {
+    img {
+      transform: scale(1.05);
+    }
+  }
+}
+
+// Демо иконок
+.icons-demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: t.$spacer * 1.5;
+  align-items: center;
+  color: t.$color-primary;
+}

@@ -1,0 +1,41 @@
+{
+  "name": "pechnik-site",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Astro Starter для интернет-магазина Pechnik.su",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && node scripts/postbuild.mjs",
+    "preview": "astro preview",
+    "check": "astro check",
+    "verify:dist": "node scripts/verify_dist.mjs",
+    "test:product-card": "node scripts/test_product_card.mjs"
+  },
+  "browserslist": [
+    "> 0.5%",
+    "last 2 versions",
+    "not dead",
+    "not IE 11"
+  ],
+  "dependencies": {
+    "@fancyapps/ui": "^6.1.15",
+    "bootstrap": "5.2.3",
+    "sweetalert2": "^11.26.25",
+    "swiper": "^14.4.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "astro": "^6.4.8",
+    "autoprefixer": "^10.4.20",
+    "esbuild": "^0.27.3",
+    "postcss": "^8.4.49",
+    "puppeteer-core": "^25.17.0",
+    "sass": "^1.108.2",
+    "typescript": "^5.6.3",
+    "vite-svg-2-webfont": "^8.5.0"
+  }
+}

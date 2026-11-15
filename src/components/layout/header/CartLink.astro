@@ -1,0 +1,27 @@
+---
+/**
+ * CartLink.astro — ссылка на корзину со счётчиком товаров.
+ *
+ * Количество приходит через props (на этапе CMS — из Битрикс).
+ * Badge: при 0 — нейтральный тёмный, при >0 — акцентный.
+ * Разметка счётчика ([data-cart-count]) позволит обновлять его из JS Битрикс.
+ */
+import Icon from '../../ui/Icon.astro';
+
+interface Props {
+  /** Количество товаров в корзине (0 и более) */
+  count?: number;
+  href?: string;
+}
+
+const { count = 0, href = '/cart/' } = Astro.props;
+---
+
+<a
+  class:list={['cart-link', { 'cart-link--filled': count > 0 }]}
+  href={href}
+  aria-label={`Корзина, товаров: ${count}`}
+>
+  <Icon name="cart" size={26} />
+  <span class="cart-link__badge" data-cart-count>{count}</span>
+</a>
